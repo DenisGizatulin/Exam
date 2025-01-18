@@ -1,11 +1,22 @@
 import json
 
-try:
-    # Открытие и чтение файла
-    with open('exam_file.json', 'r', encoding='utf-8') as file:
-        data = json.load(file)  # Считываем JSON файл
+def read_json_file(file_path): # Функция для чтения данных из файла
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            return json.load(file)  # Считываем JSON файл
+    except FileNotFoundError:
+        print("Ошибка: Файл не найден.")
+    except json.JSONDecodeError:
+        print("Ошибка: Некорректный формат JSON в файле.")
+    except Exception as e:
+        print(f"Произошла непредвиденная ошибка: {e}")
+    return None
 
-    # Вывод информации на экран
+def display_data(data): # Функция для вывода данных на экран
+    if not data:
+        print("Данные отсутствуют или не были загружены.")
+        return
+
     print("Name:", data.get("Name", "N/A"))
     print("Mobile:", data.get("Mobile", "N/A"))
     print("Boolean:", data.get("Boolean", "N/A"))
@@ -15,9 +26,12 @@ try:
     print("  Permanent address:", address.get("Permanent address", "N/A"))
     print("  Current address:", address.get("current Address", "N/A"))
 
-except FileNotFoundError:
-    print("Ошибка: Файл 'exam_file.json' не найден.")
-except json.JSONDecodeError:
-    print("Ошибка: Некорректный формат JSON в файле.")
-except Exception as e:
-    print(f"Произошла непредвиденная ошибка: {e}")
+def main():
+    # Указание пути файла
+    file_path = 'exam_file.json'
+    # Вызовы функций
+    data = read_json_file(file_path)
+    display_data(data)
+
+if __name__ == "__main__":
+    main()
